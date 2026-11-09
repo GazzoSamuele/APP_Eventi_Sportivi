@@ -1,0 +1,45 @@
+DROP TABLE IF EXISTS prova;
+DROP TABLE IF EXISTS competitions;
+DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS sport;
+
+-- Sport
+
+CREATE TABLE sport(
+
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    description TEXT,
+    image_path VARCHAR(255) DEFAULT NULL
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Categorie
+
+CREATE TABLE categories(
+
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    sport_id INT UNSIGNED NOT NULL,
+    image_path VARCHAR(255) DEFAULT NULL,
+
+    FOREIGN KEY (sport_id) REFERENCES sport(id) ON DELETE CASCADE,
+
+    UNIQUE (sport_id, name)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Competizioni
+
+CREATE TABLE competitions(
+
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    category_id INT UNSIGNED NOT NULL,
+    name VARCHAR(150) NOT NULL,
+    image_path VARCHAR(255) DEFAULT NULL,
+
+    FOREIGN KEY(category_id) REFERENCES categories(id) ON DELETE CASCADE,
+
+    UNIQUE (category_id, name)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
