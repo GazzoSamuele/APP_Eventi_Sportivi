@@ -1,0 +1,15 @@
+{
+    "name": "samuele/app_calendario_eventi_sportivi",
+    "autoload": {
+        "psr-4": {
+            "Samuele\\AppCalendarioEventiSportivi\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "GazzoSamuele",
+            "email": "samuelegazzo69@gmail.com"
+        }
+    ],
+    "require": {}
+}
