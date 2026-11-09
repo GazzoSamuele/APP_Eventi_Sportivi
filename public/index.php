@@ -3,28 +3,45 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 use Samuele\AppCalendarioEventiSportivi\Database;
+use Samuele\AppCalendarioEventiSportivi\Http\Response;
+use Samuele\AppCalendarioEventiSportivi\Http\Router;
+
+set_exception_handler(function (Throwable $e) {
+    error_log($e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+    Response::errore('Errore interno del server', 500);
+});
+
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
+
+// il browser manda una richiesta OPTIONS di prova prima di quelle vere: rispondiamo "ok" e basta
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(204);
+    exit;
+}
 
 // legge il .env e restituisce un array ['DB_HOST' => '127.0.0.1', ...]
 $config = parse_ini_file(__DIR__ . '/../.env');
 
 if ($config === false) {
-    http_response_code(500);
-    exit('Configurazione errata: file .env mancante');
+    throw new RuntimeException('File .env mancante o non leggibile');
 }
 
-try {
-    $pdo = Database::connect($config);
-} catch (PDOException $e) {
+$pdo = Database::connect($config);
 
-    // il messaggio vero va nel log, mai a chi visita la pagina
-    error_log('DB non raggiungibile: ' . $e->getMessage());
-    http_response_code(500);
-    exit('Servizio momentaneamente non disponibile');
-}
+$router = new Router();
 
-// query di prova: verrà sostituita dal router nella Fase 1
-$righe = $pdo->query('SELECT * FROM prova')->fetchAll();
+$router->get('/api/ping', function () {
+    Response::json(['ok' => true]);
+});
 
-echo '<pre>';
-print_r($righe);
-echo '</pre>';
+$router->get('/api/db', function () use ($pdo) {
+    $pdo->query('SELECT 1');
+    Response::json(['database' => 'ok']);
+});
+
+// percorso senza la parte ?chiave=valore (es. /api/eventi?mese=11 → /api/eventi)
+$percorso = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+$router->dispatch($_SERVER['REQUEST_METHOD'], $percorso);
