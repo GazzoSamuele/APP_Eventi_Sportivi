@@ -5,6 +5,7 @@ require __DIR__ . '/../vendor/autoload.php';
 use Samuele\AppCalendarioEventiSportivi\Database;
 use Samuele\AppCalendarioEventiSportivi\Http\Response;
 use Samuele\AppCalendarioEventiSportivi\Http\Router;
+use Samuele\AppCalendarioEventiSportivi\Controller\AuthController;
 
 set_exception_handler(function (Throwable $e) {
     error_log($e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
@@ -31,6 +32,10 @@ if ($config === false) {
 $pdo = Database::connect($config);
 
 $router = new Router();
+
+$auth = new AuthController($pdo);
+
+$router->post('/api/register', fn() => $auth->register());
 
 $router->get('/api/ping', function () {
     Response::json(['ok' => true]);
