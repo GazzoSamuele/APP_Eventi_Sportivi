@@ -11,6 +11,11 @@ http:
     data: '{ "email": "test@example.com", "password": "password123" }'
   auth: inherit
 
+runtime:
+  scripts:
+    - type: after-response
+      code: bru.setEnvVar("token", res.body.token);
+
 settings:
   encodeUrl: true
   timeout: 0
