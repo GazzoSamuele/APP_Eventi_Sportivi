@@ -1,0 +1,21 @@
+info:
+  name: test preferences
+  type: http
+  seq: 8
+
+http:
+  method: PUT
+  url: "{{baseUrl}}/api/preferences"
+  body:
+    type: json
+    data: '{"competition_ids": [1, 11]}'
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

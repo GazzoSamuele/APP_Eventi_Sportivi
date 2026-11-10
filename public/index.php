@@ -55,8 +55,11 @@ $preferenze = new PreferenceController($pdo, $authUtente);
 $router->get('/api/preferences', fn() => $preferenze->index());
 $router->put('/api/preferences', fn() => $preferenze->update());
 
-$eventi = new EventController($pdo, $authUtente);
+$eventi = new EventController($pdo, $authUtente, $config['APP_URL']);
 $router->get('/api/events', fn() => $eventi->index());
+$router->post('/api/feed-token', fn() => $eventi->feedToken());
+
+$router->get('/api/calendar.ics', fn() => $eventi->calendar());
 
 $router->get('/api/ping', function () {
     Response::json(['ok' => true]);
