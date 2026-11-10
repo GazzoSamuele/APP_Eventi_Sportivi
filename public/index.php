@@ -52,6 +52,7 @@ $router->get('/api/sport', fn() => $sport->index());
 
 $preferenze = new PreferenceController($pdo, $authUtente);
 $router->get('/api/preferences', fn() => $preferenze->index());
+$router->put('/api/preferences', fn() => $preferenze->update());
 
 $router->get('/api/ping', function () {
     Response::json(['ok' => true]);

@@ -16,6 +16,11 @@ class Router
         $this->rotte['POST'][$percorso] = $azione;
     }
 
+    public function put(string $percorso, callable $azione): void
+    {
+        $this->rotte['PUT'][$percorso] = $azione;
+    }
+
     public function dispatch(string $metodo, string $percorso): void
     {
         // 1. la rotta esiste per questo metodo: prendo la funzione salvata e la eseguo
