@@ -8,7 +8,7 @@ http:
   url: "{{baseUrl}}/api/register"
   body:
     type: json
-    data: '{ "email": "test@example.com", "password": "pa" }'
+    data: '{ "email": "test@example.com", "password": "password123" }'
   auth: inherit
 
 settings:

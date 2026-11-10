@@ -6,6 +6,7 @@ use Samuele\AppCalendarioEventiSportivi\Database;
 use Samuele\AppCalendarioEventiSportivi\Http\Response;
 use Samuele\AppCalendarioEventiSportivi\Http\Router;
 use Samuele\AppCalendarioEventiSportivi\Controller\AuthController;
+use Samuele\AppCalendarioEventiSportivi\Auth;
 
 set_exception_handler(function (Throwable $e) {
     error_log($e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
@@ -36,6 +37,13 @@ $router = new Router();
 $auth = new AuthController($pdo);
 
 $router->post('/api/register', fn() => $auth->register());
+$router->post('/api/login', fn() => $auth->login());
+
+$authUtente = new Auth($pdo);
+
+$router->get('/api/me', fn() => Response::json($authUtente->richiediUtente()));
+
+$router->post('/api/logout', fn() => $auth->logout());
 
 $router->get('/api/ping', function () {
     Response::json(['ok' => true]);

@@ -16,4 +16,16 @@ class Request
 
         return $dati;
     }
+
+    public static function bearerToken(): ?string
+    {
+        $headers = getallheaders();
+        $authorization = $headers['Authorization'] ?? '';
+
+        if (!str_starts_with($authorization, 'Bearer ')) {
+            return null;
+        }
+
+        return substr($authorization, 7);
+    }
 }
