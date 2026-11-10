@@ -8,6 +8,7 @@ use Samuele\AppCalendarioEventiSportivi\Http\Router;
 use Samuele\AppCalendarioEventiSportivi\Controller\AuthController;
 use Samuele\AppCalendarioEventiSportivi\Controller\SportController;
 use Samuele\AppCalendarioEventiSportivi\Controller\PreferenceController;
+use Samuele\AppCalendarioEventiSportivi\Controller\EventController;
 use Samuele\AppCalendarioEventiSportivi\Auth;
 
 set_exception_handler(function (Throwable $e) {
@@ -53,6 +54,9 @@ $router->get('/api/sport', fn() => $sport->index());
 $preferenze = new PreferenceController($pdo, $authUtente);
 $router->get('/api/preferences', fn() => $preferenze->index());
 $router->put('/api/preferences', fn() => $preferenze->update());
+
+$eventi = new EventController($pdo, $authUtente);
+$router->get('/api/events', fn() => $eventi->index());
 
 $router->get('/api/ping', function () {
     Response::json(['ok' => true]);
