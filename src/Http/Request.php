@@ -19,8 +19,9 @@ class Request
 
     public static function bearerToken(): ?string
     {
-        $headers = getallheaders();
-        $authorization = $headers['Authorization'] ?? '';
+        // i nomi degli header non distinguono maiuscole e minuscole (Dart li manda minuscoli)
+        $headers = array_change_key_case(getallheaders(), CASE_LOWER);
+        $authorization = $headers['authorization'] ?? '';
 
         if (!str_starts_with($authorization, 'Bearer ')) {
             return null;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'login_screen.dart';
 import '../api/api_client.dart';
 import '../models/sport.dart';
 
@@ -19,10 +20,29 @@ class _SportsScreenState extends State<SportsScreen> {
     _sport = ApiClient().fetchSports();
   }
 
+  Future<void> _esci() async {
+    await ApiClient().logout();
+
+    if (!mounted) return;
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const LoginScreen()),
+      (route) => false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Sport')),
+      appBar: AppBar(
+        title: const Text('Sport'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Esci',
+            onPressed: _esci,
+          ),
+        ],
+      ),
       body: FutureBuilder<List<Sport>>(
         future: _sport,
         builder: (context, snapshot) {

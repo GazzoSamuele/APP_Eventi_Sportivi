@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../api/api_client.dart';
 import '../auth/token_storage.dart';
-import 'sports_screen.dart';
+import 'events_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -44,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
       // 4. vai alla schermata degli sport, senza poter tornare indietro al login
       if (!mounted) return;
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const SportsScreen()),
+        MaterialPageRoute(builder: (_) => const EventsScreen()),
       );
     } on ApiException catch (e) {
       setState(() => _errore = e.message);

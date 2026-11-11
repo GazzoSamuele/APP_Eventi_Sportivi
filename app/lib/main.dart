@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
 
+import 'auth/token_storage.dart';
+import 'screens/events_screen.dart';
 import 'screens/login_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final token = await TokenStorage.leggi();
+
+  runApp(MyApp(loggato: token != null));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool loggato;
+
+  const MyApp({super.key, required this.loggato});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Calendario Sportivo',
       theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
-      home: const LoginScreen(),
+      home: loggato ? const EventsScreen() : const LoginScreen(),
     );
   }
 }
